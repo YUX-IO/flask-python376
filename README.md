@@ -28,4 +28,4 @@ two steps.
 - don't forget to check out the `sample-app` folder!
 - everything in the folder `static` is served by nginx.
 
-cheers
+cheers!
