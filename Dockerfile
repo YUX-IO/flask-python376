@@ -1,34 +1,26 @@
-FROM python:3.7.6-slim
+FROM python:3.7.6
 
-MAINTAINER YUX <yu.xiao.fr@gmail.com>
+LABEL maintainer="XIAO Yu <yu.xiao.fr@gmail.com>"
 
-RUN apt-get update
-RUN apt-get -y upgrade
-RUN apt-get install -y build-essential
-RUN pip install --upgrade pip
-RUN pip install --upgrade wheel
-RUN apt-get -y install nginx supervisor
-RUN pip install --no-cache-dir gunicorn Flask
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir meinheld gunicorn flask
 
-RUN mkdir -p /usr/src/app
-RUN mkdir -p /usr/src/app/static
-WORKDIR /usr/src/app
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-ONBUILD COPY requirements.txt /usr/src/app/
+COPY ./start.sh /start.sh
+RUN chmod +x /start.sh
+
+COPY ./gunicorn_conf.py /gunicorn_conf.py
+
+ONBUILD COPY . /app
 ONBUILD RUN pip install --no-cache-dir -r requirements.txt
+WORKDIR /app/
 
-ONBUILD COPY . /usr/src/app
-
-# nginx setup
-RUN rm /etc/nginx/sites-enabled/default
-COPY flask.conf /etc/nginx/sites-available/
-RUN ln -s /etc/nginx/sites-available/flask.conf /etc/nginx/sites-enabled/flask.conf
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-
-# supervisor setup
-RUN mkdir -p /var/log/supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/
-COPY gunicorn.conf /etc/supervisor/conf.d/
+ENV PYTHONPATH=/app
 
 EXPOSE 80
-CMD ["/usr/bin/supervisord"]
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["/start.sh"]
