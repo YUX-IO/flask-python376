@@ -1,7 +1,10 @@
-FROM python:3.7.6
+FROM python:3.7.6-slim
 
 LABEL maintainer="XIAO Yu <yu.xiao.fr@gmail.com>"
 
+RUN apt-get update
+RUN apt-get -y upgrade
+RUN apt-get install -y build-essential
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir meinheld gunicorn flask
 

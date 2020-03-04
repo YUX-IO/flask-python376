@@ -7,4 +7,4 @@ script:
   - docker ps | grep -q flask-python376
 after_success:
  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
- - docker push yuxio/flask-python376:latest
+ - docker push yuxio/flask-python376:slim
