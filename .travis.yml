@@ -1,8 +1,8 @@
 services: 
   - docker
 install: 
-  - docker build -t yuxio/flask-python376 .
-  - docker run -d --name=flask-python376 yuxio/flask-python376
+  - docker build -t yuxio/flask-python376::slim .
+  - docker run -d --name=flask-python376 yuxio/flask-python376::slim
 script:
   - docker ps | grep -q flask-python376
 after_success:
