@@ -19,7 +19,6 @@ COPY ./gunicorn_conf.py /gunicorn_conf.py
 ONBUILD COPY . /app
 ONBUILD RUN pip install --no-cache-dir -r requirements.txt
 WORKDIR /app/
-
 ENV PYTHONPATH=/app
 
 EXPOSE 80
