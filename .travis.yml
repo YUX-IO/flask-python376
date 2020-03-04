@@ -1,0 +1,10 @@
+services: 
+  - docker
+install: 
+  - docker build -t yuxio/flask-python376 .
+  - docker run -d --name=flask-python376 yuxio/flask-python376
+script:
+  - docker ps | grep -q flask-python376
+after_success:
+ - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+ - docker push yuxio/flask-python376:latest
